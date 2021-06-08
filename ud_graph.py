@@ -204,6 +204,23 @@ class UndirectedGraph:
         """
         Return number of connected components in the graph
         """
+        # https://web.stanford.edu/class/archive/cs/cs161/cs161.1182/Lectures/Lecture10/CS161Lecture10.pdf
+        # BFS/DFS Proof
+        visited_vertices = set()
+        components_count = 0
+        vertices = self.get_vertices()
+        # Each vertex that can be reached from a given vertex composes a single connected component
+        # Go through every vertex, finding connected components one at a time
+        for v in vertices:
+            # Do not need to search from v if it is already part of a previous connected component
+            if v not in visited_vertices:
+                visited_vertices.add(v)
+                con_components = self.bfs(v)
+                components_count += 1
+                for vertex in con_components:
+                    visited_vertices.add(vertex)
+        return components_count
+
 
     def has_cycle(self):
         """
