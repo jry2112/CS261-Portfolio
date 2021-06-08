@@ -102,7 +102,7 @@ class UndirectedGraph:
         """
         Return list of vertices in the graph (any order)
         """
-        return self.adj_list.keys()
+        return list(self.adj_list.keys())
 
     def get_edges(self) -> []:
         """
