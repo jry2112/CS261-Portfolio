@@ -1,7 +1,13 @@
-# Course: 
-# Author: 
-# Assignment: 
-# Description:
+# Course: CS 261
+# Author: Jada Young
+# Assignment: Asignment 6 - Undirected Graph
+# Description: Implementation of Undirected Graph via Adjacency List. Supports the following types of graph:
+# undirected, unweighted, no duplicate edges, no loops. Cycles are allowed.
+# Included methods: 1) add_vertex(), add_edge(); 2) remove_edge(), remove_vertex; 3) get_vertices(), get_edges(); 4)
+# is_valid_path(), dfs(), bfs(); 5) count_connected_components(), has_cycle()
+
+import heapq
+from collections import deque
 
 
 class UndirectedGraph:
@@ -42,72 +48,76 @@ class UndirectedGraph:
 
     def add_vertex(self, v: str) -> None:
         """
-        Add new vertex to the graph
+        Add new vertex to the graph as key with value set to empty list. Does nothing if vertex is already present.
         """
-        
+        # if adjacency list is empty or key not present
+        if len(self.adj_list) == 0 or v not in self.adj_list:
+            self.adj_list[v] = []
+
     def add_edge(self, u: str, v: str) -> None:
         """
-        Add edge to the graph
+        Add edge to the graph by connecting two vertices with provided name. If either (or both) vertex names do not
+        exist, the method first creates them. If an edge already exists in the graph, or if u and v are the same,
+        the method does nothing.
         """
-        
+        # Same vertex check
+        if u != v:
+            # Check if vertices are in graph
+            if u not in self.adj_list:
+                self.add_vertex(u)
+            if v not in self.adj_list:
+                self.add_vertex(v)
+            # Check if edge already exists, add if not
+            if v not in self.adj_list[u] and u not in self.adj_list[v]:
+                self.adj_list[u].append(v)
+                self.adj_list[v].append(u)
 
     def remove_edge(self, v: str, u: str) -> None:
         """
         Remove edge from the graph
         """
-        
 
     def remove_vertex(self, v: str) -> None:
         """
         Remove vertex and all connected edges
         """
-        
 
     def get_vertices(self) -> []:
         """
         Return list of vertices in the graph (any order)
         """
-       
 
     def get_edges(self) -> []:
         """
         Return list of edges in the graph (any order)
         """
-        
 
     def is_valid_path(self, path: []) -> bool:
         """
         Return true if provided path is valid, False otherwise
         """
-       
 
     def dfs(self, v_start, v_end=None) -> []:
         """
         Return list of vertices visited during DFS search
         Vertices are picked in alphabetical order
         """
-       
 
     def bfs(self, v_start, v_end=None) -> []:
         """
         Return list of vertices visited during BFS search
         Vertices are picked in alphabetical order
         """
-        
 
     def count_connected_components(self):
         """
         Return number of connected componets in the graph
         """
-      
 
     def has_cycle(self):
         """
         Return True if graph contains a cycle, False otherwise
         """
-       
-
-   
 
 
 if __name__ == '__main__':
@@ -128,7 +138,6 @@ if __name__ == '__main__':
         g.add_edge(u, v)
     print(g)
 
-
     print("\nPDF - method remove_edge() / remove_vertex example 1")
     print("----------------------------------------------------")
     g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE'])
@@ -139,7 +148,6 @@ if __name__ == '__main__':
     g.remove_vertex('D')
     print(g)
 
-
     print("\nPDF - method get_vertices() / get_edges() example 1")
     print("---------------------------------------------------")
     g = UndirectedGraph()
@@ -147,14 +155,12 @@ if __name__ == '__main__':
     g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE'])
     print(g.get_edges(), g.get_vertices(), sep='\n')
 
-
     print("\nPDF - method is_valid_path() example 1")
     print("--------------------------------------")
     g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE'])
     test_cases = ['ABC', 'ADE', 'ECABDCBE', 'ACDECB', '', 'D', 'Z']
     for path in test_cases:
         print(list(path), g.is_valid_path(list(path)))
-
 
     print("\nPDF - method dfs() and bfs() example 1")
     print("--------------------------------------")
@@ -167,7 +173,6 @@ if __name__ == '__main__':
     for i in range(1, len(test_cases)):
         v1, v2 = test_cases[i], test_cases[-1 - i]
         print(f'{v1}-{v2} DFS:{g.dfs(v1, v2)} BFS:{g.bfs(v1, v2)}')
-
 
     print("\nPDF - method count_connected_components() example 1")
     print("---------------------------------------------------")
@@ -184,7 +189,6 @@ if __name__ == '__main__':
         g.add_edge(u, v) if command == 'add' else g.remove_edge(u, v)
         print(g.count_connected_components(), end=' ')
     print()
-
 
     print("\nPDF - method has_cycle() example 1")
     print("----------------------------------")
