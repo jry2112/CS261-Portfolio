@@ -130,8 +130,8 @@ class UndirectedGraph:
         elif len(path) == 1:
             valid_flag = path[0] in self.adj_list
         else:
-            while valid_flag and index < len(path)-1:  # second to last vertex in path
-                valid_flag = self.is_reachable(path[index], path[index+1])
+            while valid_flag and index < len(path) - 1:  # second to last vertex in path
+                valid_flag = self.is_adjacent(path[index], path[index + 1])
                 index += 1
 
         return valid_flag
@@ -221,20 +221,51 @@ class UndirectedGraph:
                     visited_vertices.add(vertex)
         return components_count
 
-
     def has_cycle(self):
         """
         Return True if graph contains a cycle, False otherwise
         """
+        vertices = self.get_vertices()
+        # base case, not enough vertices to have cycle
+        if len(vertices) <= 2:
+            return False
+        else:
+            visited = []
+            for vertex in vertices:
+                if vertex not in visited:
+                    if self.has_cycle_helper(vertex, visited):
+                        return True
+            return False
 
-# -------------------------HELPERS---------------------------------------------------------------
-    def is_reachable(self, u: str, v: str) -> bool:
+    # -------------------------HELPERS---------------------------------------------------------------
+    def is_adjacent(self, u: str, v: str) -> bool:
         """
         Helper: determines if a node is reachable from another node. Returns True if an edge exists between
         vertices, False otherwise.
         Used with: is_valid_path()
         """
         return v in self.adj_list[u] and u in self.adj_list[v]
+
+    def has_cycle_helper(self, v: str, visited: list, parent=None):
+        """
+        Helper for has_cycle. Modified DFS. Recursively goes through graph, looking for vertex v' with back edge to a
+        previously visited node that is not the parent v (vertex we started at).
+        """
+        # mark node as visited
+        visited.append(v)
+
+        # visit each adjacent node
+        for neighbor in self.adj_list[v]:
+            # if not visited, visit it
+            if neighbor not in visited:
+                if self.has_cycle_helper(neighbor, visited, v):  # neighbor (current), visited (list), v (parent vertex)
+                    return True
+
+            # if the next neighbor was already visited and is not the parent - there is a cycle
+            elif neighbor != parent:
+                return True
+
+        # We've reached the end without finding a cycle
 
 
 if __name__ == '__main__':
