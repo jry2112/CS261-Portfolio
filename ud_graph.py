@@ -118,8 +118,30 @@ class UndirectedGraph:
 
     def is_valid_path(self, path: []) -> bool:
         """
-        Return true if provided path is valid, False otherwise
+        Return true if provided path is valid, False otherwise. Empty paths are valid. Implemented with is_reachable().
         """
+        valid_flag = True
+        index = 0
+
+        # base case, single ir empty path given
+        if len(path) == 0:
+            pass
+        elif len(path) == 1:
+            valid_flag = path[0] in self.adj_list
+        else:
+            while valid_flag and index < len(path)-1:  # second to last vertex in path
+                valid_flag = self.is_reachable(path[index], path[index+1])
+                index += 1
+
+        return valid_flag
+
+    def is_reachable(self, u: str, v: str) -> bool:
+        """
+        Helper: determines if a node is reachable from another node. Returns True if an edge exists between
+        vertices, False otherwise.
+        Used with: is_valid_path()
+        """
+        return v in self.adj_list[u] and u in self.adj_list[v]
 
     def dfs(self, v_start, v_end=None) -> []:
         """
