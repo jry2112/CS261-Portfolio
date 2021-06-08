@@ -7,6 +7,7 @@
 # is_valid_path(), dfs(), bfs(); 5) count_connected_components(), has_cycle()
 
 import heapq
+import queue
 from collections import deque
 
 
@@ -135,6 +136,81 @@ class UndirectedGraph:
 
         return valid_flag
 
+    def dfs(self, v_start, v_end=None) -> []:
+        """
+        Return list of vertices visited during DFS search
+        Vertices are picked in alphabetical order
+        If the starting vertex is not in the list, return an empty list. If the name of the end vertex is not in the
+        list, proceed as if there is no end vertex.
+        """
+        visited_v = []
+        dfs_stack = deque()  # stack methods: append(), pop() - LIFO
+        # base case: start not in graph or start and end are the same
+        if v_start not in self.adj_list:
+            visited_v = []
+        elif v_start == v_end:
+            visited_v.append(v_start)
+
+        else:
+            # add start to the empty stack
+            cur = v_start
+            dfs_stack.append(cur)
+
+            while cur != v_end and len(dfs_stack) != 0:
+                # if stack is not empty, pop a vertex v
+                cur = dfs_stack.pop()
+                # if v is not in visited v
+                if cur not in visited_v:
+                    # add v to the set
+                    visited_v.append(cur)
+                    # add each vertex that is a direct successor of v to the stack
+                    # since in lexo order, add last vertex first
+                    rev_edges = sorted(self.adj_list[cur], reverse=True)
+                    for edge in rev_edges:
+                        dfs_stack.append(edge)
+        return visited_v
+
+    def bfs(self, v_start, v_end=None) -> []:
+        """
+        Return list of vertices visited during BFS search
+        Vertices are picked in alphabetical order
+        If the starting vertex is not in the list, return an empty list. If the name of the end vertex is not in the
+        list, proceed as if there is no end vertex.
+        """
+        visited_v = []
+        bfs_queue = deque()  # queue methods: append(), popleft() - FIFO
+        # base case: start not in graph or start and end are the same
+        if v_start not in self.adj_list:
+            visited_v = []
+        elif v_start == v_end:
+            visited_v.append(v_start)
+        else:
+            # add start to the empty queue
+            cur = v_start
+            bfs_queue.append(cur)
+
+            while cur != v_end and len(bfs_queue) != 0:
+                cur = bfs_queue.popleft()
+                ordered_edges = sorted(self.adj_list[cur])
+                if cur not in visited_v:
+                    visited_v.append(cur)
+                    # for each direct successor-v', if v' is not in visited enqueue it
+                    for edge in ordered_edges:
+                        if edge not in visited_v:
+                            bfs_queue.append(edge)
+        return visited_v
+
+    def count_connected_components(self):
+        """
+        Return number of connected components in the graph
+        """
+
+    def has_cycle(self):
+        """
+        Return True if graph contains a cycle, False otherwise
+        """
+
+# -------------------------HELPERS---------------------------------------------------------------
     def is_reachable(self, u: str, v: str) -> bool:
         """
         Helper: determines if a node is reachable from another node. Returns True if an edge exists between
@@ -142,28 +218,6 @@ class UndirectedGraph:
         Used with: is_valid_path()
         """
         return v in self.adj_list[u] and u in self.adj_list[v]
-
-    def dfs(self, v_start, v_end=None) -> []:
-        """
-        Return list of vertices visited during DFS search
-        Vertices are picked in alphabetical order
-        """
-
-    def bfs(self, v_start, v_end=None) -> []:
-        """
-        Return list of vertices visited during BFS search
-        Vertices are picked in alphabetical order
-        """
-
-    def count_connected_components(self):
-        """
-        Return number of connected componets in the graph
-        """
-
-    def has_cycle(self):
-        """
-        Return True if graph contains a cycle, False otherwise
-        """
 
 
 if __name__ == '__main__':
