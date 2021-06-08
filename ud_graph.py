@@ -74,13 +74,29 @@ class UndirectedGraph:
 
     def remove_edge(self, v: str, u: str) -> None:
         """
-        Remove edge from the graph
+        Remove edge from the graph. If either or both vertex names do not exist, or there is not an edge between
+        them, does nothing.
         """
+        if v in self.adj_list and u in self.adj_list:
+            # check for edge
+            if v in self.adj_list[u] and u in self.adj_list[v]:
+                self.adj_list[u].remove(v)
+                self.adj_list[v].remove(u)
 
     def remove_vertex(self, v: str) -> None:
         """
-        Remove vertex and all connected edges
+        Remove vertex and all connected edges. If the vertex does not exist, does nothing.
         """
+        if v in self.adj_list:
+            # go through v's edges and remove
+            # using copy
+            v_edges = []
+            for vertex in self.adj_list[v]:
+                v_edges.append(vertex)
+            for vertex in v_edges:
+                self.remove_edge(v, vertex)
+            # delete v
+            del self.adj_list[v]
 
     def get_vertices(self) -> []:
         """
