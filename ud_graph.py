@@ -102,11 +102,19 @@ class UndirectedGraph:
         """
         Return list of vertices in the graph (any order)
         """
+        return self.adj_list.keys()
 
     def get_edges(self) -> []:
         """
-        Return list of edges in the graph (any order)
+        Return list of edges in the graph (any order). Each edge is returned as a tuple of two incident vertex names
         """
+        edge_list = []
+        for vertex in self.adj_list:
+            for adj in self.adj_list[vertex]:
+                if (adj, vertex) not in edge_list:
+                    group = vertex, adj
+                    edge_list.append(group)
+        return edge_list
 
     def is_valid_path(self, path: []) -> bool:
         """
