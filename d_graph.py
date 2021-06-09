@@ -125,9 +125,27 @@ class DirectedGraph:
 
     def is_valid_path(self, path: []) -> bool:
         """
-        TODO: Write this implementation
+        Takes a list of vertex indices and returns True if the sequence represents a valid path. Empty paths and
+        single-vertex paths are considered valid.
         """
-        pass
+        valid_flag = True
+        # base case - empty or single vertex:
+        if len(path) == 0:
+            return valid_flag
+        elif len(path) == 1 and path[0] < self.v_count:
+            return valid_flag
+        else:
+            i = 0
+            src = path[i]
+            # while we haven't reached the end of the path and path is still valid
+            while src != path[-1] and valid_flag:
+                dst = path[i+1]
+                if self.adj_matrix[src][dst] == 0:
+                    valid_flag = False
+                else:
+                    i += 1
+                    src = path[i]
+            return valid_flag
 
     def dfs(self, v_start, v_end=None) -> []:
         """
