@@ -219,6 +219,7 @@ class DirectedGraph:
         """
         Returns True if there is at least one cycle in the graph. False if the graph is acyclic.
         """
+        print(self.get_edges())
         # base case, not enough vertices to have cycle
         if self.v_count <= 2:
             return False
