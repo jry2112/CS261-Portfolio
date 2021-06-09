@@ -26,8 +26,6 @@ class DirectedGraph:
         """
         self.v_count = 0
         self.adj_matrix = []
-        # REMOVE ME
-        self.start_edges = start_edges
 
         # populate graph with initial vertices and edges (if provided)
         # before using, implement add_vertex() and add_edge() methods
@@ -194,7 +192,6 @@ class DirectedGraph:
         If the starting vertex is not in the list, return an empty list. If the name of the end vertex is not in the
         list, proceed as if there is no end vertex.
         """
-        print(self.start_edges)
         visited_v = []
         bfs_queue = deque()  # queue methods: append(), popleft() - FIFO
         # base case: start not in graph or start and end are the same
@@ -214,7 +211,7 @@ class DirectedGraph:
                     # for each direct successor-v', if v' is not in visited enqueue it
                     row = self.adj_matrix[cur]
                     for i in range(self.v_count):
-                        if row[i] > 0 and row[i] not in visited_v:
+                        if row[i] > 0 and i not in visited_v:
                             bfs_queue.append(i)
         return visited_v
 
@@ -288,6 +285,15 @@ if __name__ == '__main__':
     g = DirectedGraph(edges)
     for start in range(5):
         print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
+
+    print("\nRandom - bfs() example 2")
+    print("--------------------------------------")
+    edges = [(7, 0, 11), (8, 9, 6), (2, 5, 17), (4, 10, 11), (6, 9, 15), (3, 10, 20), (4, 0, 8), (12, 0, 1), (10, 12, 4),
+     (4, 7, 4), (0, 5, 6), (4, 1, 4), (10, 0, 16), (8, 1, 2)]
+    g = DirectedGraph(edges)
+    for start in range(4, 5):
+        print(f'{start} BFS:{g.bfs(start)}')
+
 
 
     print("\nPDF - method has_cycle() example 1")
