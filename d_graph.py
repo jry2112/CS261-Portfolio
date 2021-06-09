@@ -75,6 +75,7 @@ class DirectedGraph:
             # fill new row with 0 since edges haven't been added yet
             self.adj_matrix[index] = [0 for _ in self.adj_matrix[0]]
         self.v_count += 1
+        return self.v_count
 
     def add_edge(self, src: int, dst: int, weight=1) -> None:
         """
