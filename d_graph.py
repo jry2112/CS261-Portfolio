@@ -219,7 +219,6 @@ class DirectedGraph:
         """
         Returns True if there is at least one cycle in the graph. False if the graph is acyclic.
         """
-        print(self.get_edges())
         # base case, not enough vertices to have cycle
         if self.v_count <= 2:
             return False
@@ -274,6 +273,7 @@ class DirectedGraph:
                 if sum(self.adj_matrix[cur]) == 0:
                     leaves.append(cur)
                 # if v is not in visited v
+
                 if cur not in visited_v:
                     # add v to the set
                     visited_v.append(cur)
@@ -283,7 +283,10 @@ class DirectedGraph:
                     for i in range(self.v_count - 1, -1, -1):
                         if row[i] != 0:
                             dfs_stack.append(i)
-                elif cur in visited_v and cur not in leaves:
+
+                # make sure cur has been visited before, is not a leaf, and there is an edge between prev and cur
+                # vertices
+                elif cur in visited_v and cur not in leaves and self.adj_matrix[visited_v[-1]][cur] > 0:
                     return True
         return False
 
@@ -336,7 +339,7 @@ if __name__ == '__main__':
     print("\nRandom - bfs() example 2")
     print("--------------------------------------")
     edges = [(7, 0, 11), (8, 9, 6), (2, 5, 17), (4, 10, 11), (6, 9, 15), (3, 10, 20), (4, 0, 8), (12, 0, 1), (10, 12, 4),
-     (4, 7, 4), (0, 5, 6), (4, 1, 4), (10, 0, 16), (8, 1, 2)]
+             (4, 7, 4), (0, 5, 6), (4, 1, 4), (10, 0, 16), (8, 1, 2)]
     g = DirectedGraph(edges)
     for start in range(4, 5):
         print(f'{start} BFS:{g.bfs(start)}')
@@ -358,6 +361,15 @@ if __name__ == '__main__':
     for src, dst in edges_to_add:
         g.add_edge(src, dst)
         print(g.get_edges(), g.has_cycle(), sep='\n')
+    print('\n', g)
+
+    print("\nRandom - method has_cycle() example 2")
+    print("----------------------------------")
+    edges = [(0, 1, 15), (0, 8, 20), (1, 3, 5), (3, 7, 6), (3, 8, 5), (4, 3, 5), (4, 8, 12), (5, 2, 16), (6, 3, 3), (7, 5, 2),
+             (8, 12, 16), (9, 5, 20), (11, 1, 12), (11, 8, 2)]
+    g = DirectedGraph(edges)
+
+    print(g.get_edges(), g.has_cycle(), sep='\n')
     print('\n', g)
 
 
