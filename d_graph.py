@@ -26,6 +26,8 @@ class DirectedGraph:
         """
         self.v_count = 0
         self.adj_matrix = []
+        # REMOVE ME
+        self.start_edges = start_edges
 
         # populate graph with initial vertices and edges (if provided)
         # before using, implement add_vertex() and add_edge() methods
@@ -192,6 +194,7 @@ class DirectedGraph:
         If the starting vertex is not in the list, return an empty list. If the name of the end vertex is not in the
         list, proceed as if there is no end vertex.
         """
+        print(self.start_edges)
         visited_v = []
         bfs_queue = deque()  # queue methods: append(), popleft() - FIFO
         # base case: start not in graph or start and end are the same
