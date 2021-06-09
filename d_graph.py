@@ -91,24 +91,37 @@ class DirectedGraph:
                 row = self.adj_matrix[src]
                 row[dst] = weight
 
-
     def remove_edge(self, src: int, dst: int) -> None:
         """
-        TODO: Write this implementation
+        Removes an edge between two given vertices. If either (or both) vertex indices do not exist or if there is no
+        edge between them, does nothing.
         """
-        pass
+        # validate indices
+        if src < self.v_count and dst < self.v_count and src != dst:
+            # src -> row
+            row = self.adj_matrix[src]
+            row[dst] = 0
 
     def get_vertices(self) -> []:
         """
-        TODO: Write this implementation
+        Returns a list of vertices.
         """
-        pass
+        # vertices = count - 1
+        vertices = [i for i in range(self.v_count)]
+        return vertices
 
     def get_edges(self) -> []:
         """
-        TODO: Write this implementation
+        Returns list of edges in the graph in the form (src, dst, weight).
         """
-        pass
+        edges = []
+        # row -> src, col -> dst, [row][col] -> weight
+        for row in range(self.v_count):
+            for col in range(self.v_count):
+                weight = self.adj_matrix[row][col]
+                if weight > 0:
+                    edges.append((row, col, weight))
+        return edges
 
     def is_valid_path(self, path: []) -> bool:
         """
