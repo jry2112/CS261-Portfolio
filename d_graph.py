@@ -1,7 +1,13 @@
 # Course: CS261 - Data Structures
-# Author:
-# Assignment:
-# Description:
+# Author: Jada Young
+# Assignment: Assignment 6 - Directed Graph
+# Description: Implementation of Directed Graph with adjacency matrix. Can support the following types of graphs:
+# directed, weighted (positive edge weights only), no duplicate edges, no loops. Cycles are allowed.
+# Includes the following methods: 1) add_vertex(), add_edge(); 2) remove_edge(), get_vertices(), get_edges(); 4)
+# is_valid_path(), dfs(), bfs(); 5) has_cycles(), dijkstra()
+
+import heapq
+from collections import deque
 
 class DirectedGraph:
     """
@@ -52,15 +58,38 @@ class DirectedGraph:
 
     def add_vertex(self) -> int:
         """
-        TODO: Write this implementation
+        Adds a new vertex to the graph. Vertex name does not need to be provided; vertex is assigned a reference
+        index (integer): 0, 1, 2, 3, ..., n. Returns a single integer - the number of vertices in the graph after the
+        addition.
         """
-        pass
+        # base case - adj matrix is empty
+        if len(self.adj_matrix) == 0:
+            self.adj_matrix.append([0])
+        else:
+            index = self.v_count
+            #increase x
+            for row in self.adj_matrix:
+                row.append(0)
+            # increase y - add a new list to the end
+            self.adj_matrix.append([])
+            # fill new row with 0 since edges haven't been added yet
+            self.adj_matrix[index] = [0 for _ in self.adj_matrix[0]]
+        self.v_count += 1
 
     def add_edge(self, src: int, dst: int, weight=1) -> None:
         """
-        TODO: Write this implementation
+        Adds a new edge to the graph, connecting two vertices with provided indices. If either (or both) vertex
+        indices do not exist in the graph, or if the weight is not a positive integer, or if src and dst refer to the
+        same vertex, does nothing. If an edge already exists, updates weight.
         """
-        pass
+        # valid indices
+        if src < self.v_count and dst < self.v_count and src != dst:
+            # valid weight
+            if weight > 0:
+                # i-th row, j-th col = weight of i -> j
+                row = self.adj_matrix[src]
+                row[dst] = weight
+
 
     def remove_edge(self, src: int, dst: int) -> None:
         """
