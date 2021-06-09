@@ -138,11 +138,13 @@ class DirectedGraph:
             i = 0
             src = path[i]
             # while we haven't reached the end of the path and path is still valid
-            while src != path[-1] and valid_flag:
-                dst = path[i+1]
-                if self.adj_matrix[src][dst] == 0:
+            while valid_flag and i < len(path)-1:
+                dest = path[i+1]
+                # check if destination vertex is valid
+                if self.adj_matrix[src][dest] == 0:
                     valid_flag = False
                 else:
+                    # keep looking
                     i += 1
                     src = path[i]
             return valid_flag
@@ -170,6 +172,19 @@ class DirectedGraph:
         TODO: Write this implementation
         """
         pass
+
+    def get_connected_vertices(self, src: int) -> []:
+        """
+        Helper: Takes a given src vertex index and returns a list of destination vertex indices that share a directed
+        edge with the source. Used with is_valid_path().
+        """
+        if 0 <= src < self.v_count:
+            vertices = []
+            row = self.adj_matrix[src]
+            for i in range(self.v_count):
+                if row[i] > 0:
+                    vertices.append(i)
+            return vertices
 
 
 if __name__ == '__main__':
