@@ -263,9 +263,8 @@ class UndirectedGraph:
             # if the next neighbor was already visited and is not the parent - there is a cycle
             elif neighbor != parent:
                 return True
-
         # We've reached the end without finding a cycle
-
+        return False
 
 if __name__ == '__main__':
 

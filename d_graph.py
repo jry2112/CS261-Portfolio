@@ -219,20 +219,25 @@ class DirectedGraph:
         """
         Returns True if there is at least one cycle in the graph. False if the graph is acyclic.
         """
-        print(self.get_edges())
         # base case, not enough vertices to have cycle
         if self.v_count <= 2:
             return False
         else:
-            visited = []
-            for vertex in range(self.v_count):
-                if self.has_cycle_helper(vertex):
-                    return True
+            # mark all vertices as not visited
+            color = ["WHITE" for vertex in range(self.v_count)]  # haven't been visited yet
+            # follow the paths for each vertex
+            for i in range(self.v_count):
+                if color[i] == "WHITE":
+                    if self.has_cycle_helper2(i, color):
+                        return True
             return False
 
     def dijkstra(self, src: int) -> []:
         """
-        TODO: Write this implementation
+        Implements the Dijkstra algorithm to compute the length of the shortest path from a given vertex to all other
+        vertices in the graph. It returns a list with one value per each vertex in the graph, where value at index 0 is
+        the length of the shortest path from vertex SRC to vertex 0, value at index 1 is the length of the shortest path
+        from vertex SRCto vertex 1 etc. If a certain vertex is not reachable from SRC, returned value is INF
         """
         pass
 
@@ -250,12 +255,12 @@ class DirectedGraph:
             return vertices
 
 # -----------------HELPERS------------------------------------------
-    def has_cycle_helper(self, v_start: str):
+    def has_cycle_helper(self, v_start: str, visited: list, parent=None):
         """
         Helper for has_cycle. Modified DFS. Recursively goes through graph, looking for vertex v' with back edge to a
         previously visited node that is not the parent v (vertex we started at).
         """
-        print(self.get_edges())
+        visited.append(v_start)
         visited_v = []
         dfs_stack = deque()  # stack methods: append(), pop() - LIFO
         leaves = []
@@ -280,20 +285,37 @@ class DirectedGraph:
                     # add v to the set
                     visited_v.append(cur)
                     # push direct successors to stack
-                    row = self.adj_matrix[cur]
-                    # reverse order
-                    for i in range(self.v_count - 1, -1, -1):
-                        if row[i] != 0:
-                            dfs_stack.append(i)
+                    neighbors = self.get_connected_vertices(cur)
+                    for v in neighbors:
+                        dfs_stack.append(v)
 
                 # make sure cur has been visited before, is not a leaf, and there is an edge between prev and cur
                 # vertices
-                elif cur in visited_v and cur not in leaves:
+                elif cur in visited and cur not in leaves:
                     prev = visited_v[-1]
-                    if self.is_valid_path([prev, cur]):
+                    if self.is_valid_path([prev, cur]) and self.is_valid_path([cur]):
                         return True
         return False
 
+    def has_cycle_helper2(self, v_start: str, color: list):
+        """
+        Helper for has_cycle. Modified DFS. Recursively goes through graph, Traveling down one path at a time. If we
+        loop back to a previously visited vertex, returns True.
+        """
+        # Mark current node as currently being visited (GREY)
+        color[v_start] = "GREY"
+
+        # see if connected vertices have already been visited
+        next_v = self.get_connected_vertices(v_start)
+        for v in next_v:
+            if color[v] == "GREY":
+                return True
+            # if current connected v has not been visited, continue down the path
+            if color[v] == "WHITE" and self.has_cycle_helper2(v, color):
+                return True
+        # done visiting
+        color[v_start] = "BLACK"
+        return False
 
 if __name__ == '__main__':
 
@@ -376,6 +398,14 @@ if __name__ == '__main__':
     print(g.get_edges(), g.has_cycle(), sep='\n')
     print('\n', g)
 
+    print("\nRandom - method has_cycle() example 3")
+    print("----------------------------------")
+    edges = [(1, 4, 13), (1, 10, 1), (1, 11, 7), (2, 1, 7), (2, 6, 1), (2, 10, 4), (3, 9, 19), (4, 9, 2), (4, 11, 10), (
+    6, 1, 12), (6, 3, 11), (12, 9, 3)]
+    g = DirectedGraph(edges)
+
+    print(g.get_edges(), g.has_cycle(), sep='\n')
+    print('\n', g)
 
     print("\nPDF - dijkstra() example 1")
     print("--------------------------")
