@@ -250,6 +250,7 @@ class UndirectedGraph:
         Helper for has_cycle. Modified DFS. Recursively goes through graph, looking for vertex v' with back edge to a
         previously visited node that is not the parent v (vertex we started at).
         """
+        print(self.get_edges())
         # mark node as visited
         visited.append(v)
 
