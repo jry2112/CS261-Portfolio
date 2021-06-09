@@ -255,6 +255,7 @@ class DirectedGraph:
         Helper for has_cycle. Modified DFS. Recursively goes through graph, looking for vertex v' with back edge to a
         previously visited node that is not the parent v (vertex we started at).
         """
+        print(self.get_edges())
         visited_v = []
         dfs_stack = deque()  # stack methods: append(), pop() - LIFO
         leaves = []
@@ -287,8 +288,10 @@ class DirectedGraph:
 
                 # make sure cur has been visited before, is not a leaf, and there is an edge between prev and cur
                 # vertices
-                elif cur in visited_v and cur not in leaves and self.adj_matrix[visited_v[-1]][cur] > 0:
-                    return True
+                elif cur in visited_v and cur not in leaves:
+                    prev = visited_v[-1]
+                    if self.is_valid_path([prev, cur]):
+                        return True
         return False
 
 
