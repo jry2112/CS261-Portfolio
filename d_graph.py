@@ -217,9 +217,17 @@ class DirectedGraph:
 
     def has_cycle(self):
         """
-        TODO: Write this implementation
+        Returns True if there is at least one cycle in the graph. False if the graph is acyclic.
         """
-        pass
+        # base case, not enough vertices to have cycle
+        if self.v_count <= 2:
+            return False
+        else:
+            visited = []
+            for vertex in range(self.v_count):
+                if self.has_cycle_helper(vertex):
+                    return True
+            return False
 
     def dijkstra(self, src: int) -> []:
         """
@@ -239,6 +247,44 @@ class DirectedGraph:
                 if row[i] > 0:
                     vertices.append(i)
             return vertices
+
+# -----------------HELPERS------------------------------------------
+    def has_cycle_helper(self, v_start: str):
+        """
+        Helper for has_cycle. Modified DFS. Recursively goes through graph, looking for vertex v' with back edge to a
+        previously visited node that is not the parent v (vertex we started at).
+        """
+        visited_v = []
+        dfs_stack = deque()  # stack methods: append(), pop() - LIFO
+        leaves = []
+        # base case: start not in graph or start and end are the same
+        if v_start >= self.v_count:
+            visited_v = []
+
+        else:
+            # add start to the empty stack
+            cur = v_start
+            dfs_stack.append(cur)
+
+            # traverse graph
+            while len(dfs_stack) > 0:
+                cur = dfs_stack.pop()
+                # check if cur is a leaf
+                if sum(self.adj_matrix[cur]) == 0:
+                    leaves.append(cur)
+                # if v is not in visited v
+                if cur not in visited_v:
+                    # add v to the set
+                    visited_v.append(cur)
+                    # push direct successors to stack
+                    row = self.adj_matrix[cur]
+                    # reverse order
+                    for i in range(self.v_count - 1, -1, -1):
+                        if row[i] != 0:
+                            dfs_stack.append(i)
+                elif cur in visited_v and cur not in leaves:
+                    return True
+        return False
 
 
 if __name__ == '__main__':
