@@ -84,7 +84,7 @@ class DirectedGraph:
         same vertex, does nothing. If an edge already exists, updates weight.
         """
         # valid indices
-        if src < self.v_count and dst < self.v_count and src != dst:
+        if 0 < src < self.v_count and 0 < dst < self.v_count and src != dst:
             # valid weight
             if weight > 0:
                 # i-th row, j-th col = weight of i -> j
@@ -97,7 +97,7 @@ class DirectedGraph:
         edge between them, does nothing.
         """
         # validate indices
-        if src < self.v_count and dst < self.v_count and src != dst:
+        if 0 < src < self.v_count and 0 < dst < self.v_count and src != dst:
             # src -> row
             row = self.adj_matrix[src]
             row[dst] = 0
