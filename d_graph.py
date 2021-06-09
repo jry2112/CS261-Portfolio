@@ -9,6 +9,7 @@
 import heapq
 from collections import deque
 
+
 class DirectedGraph:
     """
     Class to implement directed weighted graph
@@ -151,15 +152,68 @@ class DirectedGraph:
 
     def dfs(self, v_start, v_end=None) -> []:
         """
-        TODO: Write this implementation
+        Performs DFS and returns a list of vertices visited during the search, in the order they were visited. Takes
+        index of the start vertex and optional end vertex index.
+        If v_start is not in the graph, returns []. If v_end is not in the graph, proceeds as if there was no end
+        vertex. Picks vertex index in ascending order.
         """
-        pass
+        visited_v = []
+        dfs_stack = deque()  # stack methods: append(), pop() - LIFO
+        # base case: start not in graph or start and end are the same
+        if v_start >= self.v_count:
+            visited_v = []
+        elif v_start == v_end:
+            visited_v.append(v_start)
+
+        else:
+            # add start to the empty stack
+            cur = v_start
+            dfs_stack.append(cur)
+
+            # traverse graph
+            while cur != v_end and len(dfs_stack) > 0:
+                cur = dfs_stack.pop()
+                # if v is not in visited v
+                if cur not in visited_v:
+                    # add v to the set
+                    visited_v.append(cur)
+                    # push direct successors to stack
+                    row = self.adj_matrix[cur]
+                    # reverse order
+                    for i in range(self.v_count-1, -1, -1):
+                        if row[i] != 0:
+                            dfs_stack.append(i)
+        return visited_v
 
     def bfs(self, v_start, v_end=None) -> []:
         """
-        TODO: Write this implementation
+        Return list of vertices visited during BFS search
+        Vertices are picked in alphabetical order
+        If the starting vertex is not in the list, return an empty list. If the name of the end vertex is not in the
+        list, proceed as if there is no end vertex.
         """
-        pass
+        visited_v = []
+        bfs_queue = deque()  # queue methods: append(), popleft() - FIFO
+        # base case: start not in graph or start and end are the same
+        if v_start >= self.v_count:
+            visited_v = []
+        elif v_start == v_end:
+            visited_v.append(v_start)
+        else:
+            # add start to the empty queue
+            cur = v_start
+            bfs_queue.append(cur)
+
+            while cur != v_end and len(bfs_queue) != 0:
+                cur = bfs_queue.popleft()
+                if cur not in visited_v:
+                    visited_v.append(cur)
+                    # for each direct successor-v', if v' is not in visited enqueue it
+                    row = self.adj_matrix[cur]
+                    for i in range(self.v_count):
+                        if row[i] > 0 and row[i] not in visited_v:
+                            bfs_queue.append(i)
+        return visited_v
 
     def has_cycle(self):
         """
