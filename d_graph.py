@@ -276,7 +276,7 @@ class DirectedGraph:
                     dst = self.adj_matrix[v][v_i]
                     # Push (total_dist to v_dst, v_dst) to priority queue
                     heapq.heappush(priority, (d + dst, v_i))
-        return visited_v.values()
+        return list(visited_v.values())
 
 
 # -----------------HELPERS------------------------------------------
