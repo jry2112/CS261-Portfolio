@@ -232,15 +232,6 @@ class DirectedGraph:
                         return True
             return False
 
-    def dijkstra(self, src: int) -> []:
-        """
-        Implements the Dijkstra algorithm to compute the length of the shortest path from a given vertex to all other
-        vertices in the graph. It returns a list with one value per each vertex in the graph, where value at index 0 is
-        the length of the shortest path from vertex SRC to vertex 0, value at index 1 is the length of the shortest path
-        from vertex SRCto vertex 1 etc. If a certain vertex is not reachable from SRC, returned value is INF
-        """
-        pass
-
     def get_connected_vertices(self, src: int) -> []:
         """
         Helper: Takes a given src vertex index and returns a list of destination vertex indices that share a directed
@@ -253,6 +244,40 @@ class DirectedGraph:
                 if row[i] > 0:
                     vertices.append(i)
             return vertices
+
+    def dijkstra(self, src: int) -> []:
+        """
+        Implements the Dijkstra algorithm to compute the length of the shortest path from a given vertex to all other
+        vertices in the graph. It returns a list with one value per each vertex in the graph, where value at index 0 is
+        the length of the shortest path from vertex SRC to vertex 0, value at index 1 is the length of the shortest path
+        from vertex SRC to vertex 1 etc. If a certain vertex is not reachable from SRC, returned value is INF
+        """
+        row = self.adj_matrix[src]
+        # Initialize empty map to store visited vertices and min distance
+        visited_v = {}
+        for i in range(self.v_count):
+            visited_v[i] = float('inf')
+
+        # Initialize priority queue and insert v with distance 0
+        priority = [(0, src)]
+
+        # While the priority queue is not empty
+        while len(priority) > 0:
+            # pop the first vertex from the pq
+            d_v = heapq.heappop(priority)
+            d = d_v[0]
+            v = d_v[1]
+            # if distance from src to v < current minimum d
+            if d < visited_v[v]:
+                visited_v[v] = d  # Update min_dist to v.
+                neighbors = self.get_connected_vertices(v)
+                # For every destination vertex 'v_dst' of an edge connected to v:
+                for v_i in neighbors:
+                    dst = self.adj_matrix[v][v_i]
+                    # Push (total_dist to v_dst, v_dst) to priority queue
+                    heapq.heappush(priority, (d + dst, v_i))
+        return visited_v.values()
+
 
 # -----------------HELPERS------------------------------------------
     def has_cycle_helper(self, v_start: str, visited: list, parent=None):
